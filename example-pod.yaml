@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox1
+  annotations:
+    fluentd_target: >
+      [
+          {
+             "type": "elasticsearch",
+             "host": "localhost",
+          },
+      ]
+    fluentd_parse: >
+      [
+          {
+              "type": "grok"
+              "pattern: "%{HOST} - %{IP}\[%{MONTHDAY}/%{MONTH}/%{YEAR}:%{TIME} %{INT}\] "
+          }
+      ]
+spec:
+  containers:
+  - image: busybox
+    command:
+      - sleep
+      - "3600"
+    name: busybox
