@@ -1,0 +1,1 @@
+kube-gen -watch -type pods -wait 2s:3s -post-cmd 'echo post-cmd' td-agent.conf.tmpl rendered.conf
