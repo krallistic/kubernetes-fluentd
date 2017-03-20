@@ -7,15 +7,8 @@ metadata:
     fluentd_target: >
       [
           {
-             "type": "elasticsearch",
-             "host": "localhost",
-          },
-      ]
-    fluentd_parse: >
-      [
-          {
-              "type": "grok"
-              "pattern: "%{HOST} - %{IP}\[%{MONTHDAY}/%{MONTH}/%{YEAR}:%{TIME} %{INT}\] "
+             "output": "elasticsearch",
+             "host": "localhost"
           }
       ]
 spec:
@@ -24,4 +17,4 @@ spec:
     command:
       - sleep
       - "3600"
-    name: busybox
+    name: busyboxpodpod
