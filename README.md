@@ -11,14 +11,15 @@ Kubernetes writes the log of every containter to /var/lib/*, these log files can
 Fluentd the uses a plugin to enrich the logs with metadata and routes it to defined outputs. 
 This approach is relativly fine, until you have a cluster shared between many teams. 
 The fluentd config then quickly  becomes a corrdination bottleneck if your debvelopers want to do more than route everything to es.
-Also this forces developers to defined these 
+Also this forces developers to defined these far away from their code/deployment spec, which isnt shouldnt be like that.
 
 There a few common solution to this problem:
 1. Use a extra Routing/Parsing Point. This dosnt really solves the coordination Problem, but its much easier to update and manage the config on that.
 2. Every Teams runs their own sidecar/solution. This allows developers to be really felxible, and possible defined targets rules etc in their own source. 
 But this wastes a lot in ressources and sespecially manpower.
 3. Dynamicly genereate the fluentd config from annotations defined by the developers.
-This allows developers to defined their wanted targets/parsing rules direclty at their deployment definitions, while still have a lot of flexibility. 
+This allows developers to defined their wanted targets/parsing rules direclty at their deployment definitions, while still have a lot of flexibility.
+Also a second advantage is that now developers define these in their deployment spec which is much "closer" to their code than a central repository. 
 The downside of this approach is that you need a extra moving part in your infrastructure for the generation.
 
 ## Definition
@@ -75,8 +76,9 @@ exec kube-gen -watch -type pods -wait 2s:8s -post-cmd ' sudo /etc/init.d/td-agen
 
 ## Operations
 
-In larger Clusters be carefull that you dont reload fluentd config to often since there is a signifikant overhead to this. Maybe genereate the config node spezfic and wrap a diff around to only reload if something on that spezific node changes.
+In larger Clusters be carefull that you dont reload fluentd config to often since there is a signifikant overhead to this.
+ Maybe genereate the config node spezfic and wrap a diff around to only reload if something on that spezific node changes.
 
 ## Alternatives
 
-You can also do that with Beats (link), als
+You can also do that with Beats (link)
